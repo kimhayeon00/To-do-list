@@ -14,6 +14,7 @@
 		F845DB822A0AA2F1006CFF9C /* To_do_listTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F845DB812A0AA2F1006CFF9C /* To_do_listTests.swift */; };
 		F845DB8C2A0AA2F1006CFF9C /* To_do_listUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F845DB8B2A0AA2F1006CFF9C /* To_do_listUITests.swift */; };
 		F845DB8E2A0AA2F1006CFF9C /* To_do_listUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F845DB8D2A0AA2F1006CFF9C /* To_do_listUITestsLaunchTests.swift */; };
+		F845DB9B2A0AA428006CFF9C /* datastore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F845DB9A2A0AA428006CFF9C /* datastore.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +45,7 @@
 		F845DB872A0AA2F1006CFF9C /* To do listUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "To do listUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F845DB8B2A0AA2F1006CFF9C /* To_do_listUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = To_do_listUITests.swift; sourceTree = "<group>"; };
 		F845DB8D2A0AA2F1006CFF9C /* To_do_listUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = To_do_listUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		F845DB9A2A0AA428006CFF9C /* datastore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = datastore.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +76,7 @@
 		F845DB642A0AA2EE006CFF9C = {
 			isa = PBXGroup;
 			children = (
+				F845DB9A2A0AA428006CFF9C /* datastore.swift */,
 				F845DB6F2A0AA2EE006CFF9C /* To do list */,
 				F845DB802A0AA2F1006CFF9C /* To do listTests */,
 				F845DB8A2A0AA2F1006CFF9C /* To do listUITests */,
@@ -259,6 +262,7 @@
 			files = (
 				F845DB732A0AA2EE006CFF9C /* ContentView.swift in Sources */,
 				F845DB712A0AA2EE006CFF9C /* To_do_listApp.swift in Sources */,
+				F845DB9B2A0AA428006CFF9C /* datastore.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
