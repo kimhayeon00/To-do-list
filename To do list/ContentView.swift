@@ -1,56 +1,95 @@
-//
-//  ContentView.swift
-//  To do list
-//
-//  Created by 김하연 on 2023/05/10.
-//
-
 import SwiftUI
-import Combine
 
 struct ContentView: View {
-    @ObservedObject var taskStore = TaskStore()
-    @State var newnewTask: String = ""
+    @ObservedObject var taskStore = DataStore()
+    @State var newTask: String = ""
+    @State var selectedPriority: TaskPriority?
+    
+    var priorities: [TaskPriority] = [.all, .today, .tomorrow, .thisWeek, .thisMonth, .thisYear] // "All" 메뉴 추가
     
     var searchBar: some View {
-        HStack {
-            TextField("Insert New Task", text: self.$newnewTask)
-            Button(action: self.addnewnewTask) {
-                Text("Add New")
+        VStack {
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 16) {
+                    ForEach(priorities, id: \.self) { priority in
+                        Button(action: {
+                            self.selectedPriority = priority
+                        }) {
+                            Text(priority.description)
+                                .foregroundColor(.white)
+                                .padding(.vertical, 8)
+                                .padding(.horizontal, 16)
+                                .background(priority == selectedPriority ? Color.blue : Color.gray)
+                                .cornerRadius(20)
+                        }
+                    }
+                }
+                .padding(.horizontal)
+            }
+            
+            HStack {
+                TextField("Insert New Task", text: self.$newTask)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .padding(.horizontal)
+                
+                Button(action: self.addTask) {
+                    Text("Add New")
+                }
+                .padding(.horizontal)
             }
         }
     }
     
-    func addnewnewTask() {
-        taskStore.tasks.append(Task(id: String(taskStore.tasks.count + 1), newTask: newnewTask))
-        self.newnewTask = ""
+    func addTask() {
+        guard let priority = selectedPriority else { return }
+        
+        let task = Task(id: UUID().uuidString, newTask: newTask, dueDate: priority)
+        taskStore.tasks.append(task)
+        self.newTask = ""
+        
+        // "All" 메뉴에서 작업을 추가한 경우 selectedPriority를 nil로 설정하여 모든 작업이 표시되도록 함
+        if selectedPriority == .all {
+            self.selectedPriority = nil
+        }
+    }
+    
+    var filteredTasks: [Task] {
+        if selectedPriority == .all {
+            return taskStore.tasks
+        } else if let priority = selectedPriority {
+            return taskStore.tasks.filter { $0.dueDate == priority }
+        } else {
+            return taskStore.tasks
+        }
     }
     
     var body: some View {
-            NavigationView {
-                VStack {
-                    searchBar.padding()
-                    List {
-                        ForEach(self.taskStore.tasks) { task in
-                            Text(task.newTask)
-                                .strikethrough(task.completed)
-                                .onTapGesture {
-                                    taskStore.toggleTaskCompletion(task) // 할 일의 완료 여부 변경
-                                }
-                        }
-                        .onMove(perform: self.move)
-                        .onDelete(perform: self.delete)
+        NavigationView {
+            VStack {
+                searchBar.padding()
+                List {
+                    ForEach(filteredTasks) { task in
+                        Text(task.newTask)
+                            .strikethrough(task.completed)
+                            .foregroundColor(task.completed ? Color.gray : Color.primary) // 줄이 그어지면서 글씨 색이 회색으로 변경
+                            .onTapGesture {
+                                taskStore.toggleTaskCompletion(task)
+                            }
                     }
-                    .navigationTitle("To Do List")
+                    .onMove(perform: self.move)
+                    .onDelete(perform: self.deleteTasks)
                 }
-                .navigationBarItems(trailing: EditButton())
+                .navigationTitle("To Do List")
             }
+            .navigationBarItems(trailing: EditButton())
         }
+    }
+    
     func move(from source: IndexSet, to destination: Int) {
         taskStore.tasks.move(fromOffsets: source, toOffset: destination)
     }
     
-    func delete(at offsets: IndexSet) {
+    func deleteTasks(at offsets: IndexSet) {
         taskStore.tasks.remove(atOffsets: offsets)
     }
 }
